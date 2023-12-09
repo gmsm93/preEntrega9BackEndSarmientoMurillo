@@ -6,7 +6,7 @@ import mongoose from "mongoose"
 import __dirname from "./utils.js"
 import session from "express-session"
 import MongoStore from "connect-mongo"
-import initializePassport from './config/passport.config.js'
+import initializePassport from './services/passport.config.js'
 import viewsRouter from './router/views.router.js'
 import sessionRouter from './router/session.router.js'
 import dotenv from 'dotenv'
