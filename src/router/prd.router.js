@@ -1,63 +1,23 @@
 import { Router } from "express";
-import prdModel from "../models/prd.models.js"
-import mongoose from "mongoose"
+import {getAll, getByID, createPrd, postPrd, putPrd, deletePrd} from "../controllers/prd.controller.js"
 
 const router = Router()
 
 // obtener products
-router.get('/', async(req, res) => {
-    const products = await prdModel.find().lean().exec()
-    res.render('list', {products})
-})
+router.get('/', getAll)
 
-router.get('/:id', async(req, res) => {
-    try{
-        const id = req.params.id
-        const product = await prdModel.findById(req.params.id).lean().exec()
-        res.render('one', {product})
-    } catch(error){
-        res.render('error',{error:'Error al buscar el product'})
-    }
-})
+router.get('/:id', getByID)
 
 // Formulario crear products
-router.get('/create', async(req, res) => {
-    res.render('create',{})
-})
+router.get('/create', createPrd)
 
 // Post crear products
-router.post('/', async(req, res) => {
-    try{
-        const productNew = req.body
-        const result =prdModel.create(productNew)
-        res.redirect('/product')
-    } catch(error){
-        res.render('error',{error:'Error al crear el product'})
-    }
-    
-})
+router.post('/', postPrd)
 
 // Buscar un product por nombre
-router.put('/:id', async(req, res) => {
-    try{
-        const id = req.params.id
-        await prdModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        return res.json({status:'success'})
-    } catch(error){
-        res.status(500).json(error)
-    }
-    
-})
+router.put('/:id', putPrd)
 
 // Borrar un product por nombre
-router.delete('/:id', async(req, res) => {
-    try{
-        const id = req.params.id
-        await prdModel.deleteOne({_id:id})
-        return res.json({status:'success'})
-    } catch(error){
-        res.status(500).json(error)
-    }
-})
+router.delete('/:id', deletePrd)
 
 export default router
