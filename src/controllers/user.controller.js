@@ -1,6 +1,7 @@
 import UserModel from '../models/user.model.js';
 import passport from "passport";
 import { createHash } from "../utils.js";
+import { UserDTO } from '../dto/user.dto.js';
 
 export const createUser = async (req, res) => {
     const { email, password } = req.body
@@ -76,4 +77,53 @@ export const callBackGIT = async (req, res) => {
 
     console.log(req.session);
     res.redirect('/');
+};
+
+export const getCurrentUser = (req, res) => {
+
+    const user = req.user;
+
+    const userDTO = new UserDTO(user.email, user.username);
+
+    res.json(userDTO);
+};
+
+export const getUserById = (req, res) => {
+  const userId = req.params.id;
+
+  const user = UserModel.findById(userId);
+
+  if (!user) {
+    return res.status(404).json({ message: 'Usuario no encontrado' });
+  }
+
+  const userDTO = new UserDTO(user.id, user.email);
+  res.status(200).json(userDTO);
+};
+
+
+export const updateUser = (req, res) => {
+  const userId = req.params.id;
+  const updatedUserData = req.body;
+
+  const updatedUser = UserModel.findByIdAndUpdate(userId, updatedUserData, { new: true });
+
+  if (!updatedUser) {
+    return res.status(404).json({ message: 'Usuario no encontrado' });
+  }
+
+  const userDTO = new UserDTO(updatedUser.id, updatedUser.email);
+  res.status(200).json(userDTO);
+};
+
+export const deleteUser = (req, res) => {
+  const userId = req.params.id;
+
+  const deletedUser = UserModel.findByIdAndDelete(userId);
+
+  if (!deletedUser) {
+    return res.status(404).json({ message: 'Usuario no encontrado' });
+  }
+
+  res.status(200).json({ message: 'Usuario eliminado correctamente' });
 };
