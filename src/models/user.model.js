@@ -12,7 +12,6 @@ const userSchema = new mongoose.Schema({
     role: { type: String, enum: ['usuario', 'admin'], default: 'usuario' }
 });
 
-// Métodos para manejar la contraseña
 userSchema.methods.generateHash = function (password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 };

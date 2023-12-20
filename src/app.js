@@ -10,12 +10,20 @@ import initializePassport from './services/passport.config.js'
 import viewsRouter from './router/views.router.js'
 import sessionRouter from './router/session.router.js'
 import dotenv from 'dotenv'
+import _yargs from 'yargs'
+import { hideBin } from 'yargs/helpers';
+import CartRepository from "./repository/cart.repository.js";
 
 // Inicializamos variables
 dotenv.config()
 const app=express();
 const mongoURL = process.env.MONGO_URL || "mongodb+srv://r2:L53I9bfZi00L9BkV@clusterr2.028npj6.mongodb.net/?retryWrites=true&w=majority";
 const mongoDBName = process.env.MONGO_DBNAME || 'ClusterR2';
+
+const yargs  = _yargs(hideBin(process.argv));
+const argv = await yargs.argv;
+
+const useFactoryDAO = argv['use-factory-dao'];
 
 // Configuracion de la sesion
 app.use(session({
@@ -28,6 +36,8 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }))
+
+const cartRepository = new CartRepository(useFactoryDAO);
 
 initializePassport();
 app.use(passport.initialize());
