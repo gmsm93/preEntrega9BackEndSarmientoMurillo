@@ -61,6 +61,7 @@ app.use(express.static(__dirname + '/public'));
 app.get('/health', (req, res) => res.send('ok'));
 app.use('/product', prdRouter);
 app.use('/loggerTest',loggerRouter);
+
 app.use('/', viewsRouter);
 app.use('/api/session', sessionRouter);
 app.get('/health', (req, res) => res.send('OK'));
@@ -69,9 +70,8 @@ app.get('/health', (req, res) => res.send('OK'));
 mongoose.connect(mongoURL, { dbName: mongoDBName })
   .then(() => {
     logger.info('Conexión a la base de datos exitosa')
-    app.listen(process.env.PORT || 8080, () => console.log(`Listening ...`))
+    app.listen(process.env.PORT || 8080, () => logger.info(`Listening ...`))
   })
   .catch((err) => {
     logger.error('Error de conexión a la base de datos:', err);
-  });
-
+  })

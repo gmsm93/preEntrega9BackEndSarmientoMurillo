@@ -1,25 +1,19 @@
-import winston from 'winston';
+import winston from 'winston'; 
 
 const levels = {
   debug: 0,
   http: 1,
   info: 2,
-  warning: 3,
+  warn: 3,
   error: 4,
   fatal: 5,
 };
 
-const colors = {
-  debug: 'blue',
-  http: 'orange',
-  info: 'green',
-  warning: 'yellow',
-  error: 'red',
-  fatal: 'purple',
-};
-
 const consoleTransport = new winston.transports.Console({
-  format: winston.format.simple(),
+  format: winston.format.combine(
+    winston.format.colorize(),
+    winston.format.simple()
+  ),
 });
 
 const fileTransport = new winston.transports.File({
@@ -29,8 +23,7 @@ const fileTransport = new winston.transports.File({
 
 const developmentLogger = winston.createLogger({
   levels,
-  format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
-  transports: [consoleTransport],
+  transports: [consoleTransport]
 });
 
 const productionLogger = winston.createLogger({
