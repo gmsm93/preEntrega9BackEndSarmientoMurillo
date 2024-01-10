@@ -1,5 +1,7 @@
 import express from "express"
+import logger from "./utils/logger.js";
 import prdRouter from './router/prd.router.js'
+import loggerRouter from './router/logger.router.js'
 import handlebars from 'express-handlebars'
 import passport from 'passport'
 import mongoose from "mongoose"
@@ -58,7 +60,7 @@ app.use(express.static(__dirname + '/public'));
 // configuracion de rutas
 app.get('/health', (req, res) => res.send('ok'));
 app.use('/product', prdRouter);
-
+app.use('/loggerTest',loggerRouter);
 app.use('/', viewsRouter);
 app.use('/api/session', sessionRouter);
 app.get('/health', (req, res) => res.send('OK'));
@@ -66,10 +68,10 @@ app.get('/health', (req, res) => res.send('OK'));
 // Conectar Mongo DB
 mongoose.connect(mongoURL, { dbName: mongoDBName })
   .then(() => {
-    console.log('Conexión a la base de datos exitosa')
+    logger.info('Conexión a la base de datos exitosa')
     app.listen(process.env.PORT || 8080, () => console.log(`Listening ...`))
   })
   .catch((err) => {
-    console.error('Error de conexión a la base de datos:', err);
+    logger.error('Error de conexión a la base de datos:', err);
   });
 
