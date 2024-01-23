@@ -7,4 +7,9 @@ router.get('/:id', UserController.getUserById);
 router.put('/:id', UserController.updateUser);
 router.delete('/:id', UserController.deleteUser);
 
+// router.get('/create', (req, res) => {
+//     res.render('user/create');
+// });
+router.post('/create', UserController.createUser);
+
 export default router;

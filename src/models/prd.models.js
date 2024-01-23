@@ -12,7 +12,8 @@ const prdSchema = new mongoose.Schema({
     status:{type:Boolean},
     stock:{type:Number},
     category:{type:String},
-    thumbnails:{type:String}
+    thumbnails:{type:String},
+    owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   })
 
 prdSchema.plugin(mongoosePaginate)

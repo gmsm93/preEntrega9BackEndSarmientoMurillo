@@ -9,7 +9,9 @@ const userSchema = new mongoose.Schema({
     password: String,
     first_name: String,
     last_name: String,
-    role: { type: String, enum: ['usuario', 'admin'], default: 'usuario' }
+    role: { type: String, enum: ['usuario', 'admin', 'premium'], default: 'usuario' },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
 });
 
 userSchema.methods.generateHash = function (password) {

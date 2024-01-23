@@ -2,6 +2,8 @@ import UserModel from '../models/user.model.js';
 import passport from "passport";
 import { createHash } from "../utils.js";
 import { UserDTO } from '../dto/user.dto.js';
+import crypto from 'crypto';
+import nodemailer from 'nodemailer';
 
 export const createUser = async (req, res) => {
     const { email, password } = req.body
@@ -126,4 +128,58 @@ export const deleteUser = (req, res) => {
   }
 
   res.status(200).json({ message: 'Usuario eliminado correctamente' });
+};
+
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'tu_correo@gmail.com',
+        pass: 'tu_contraseña',
+    },
+});
+
+export const requestPasswordReset = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const user = await UserModel.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+
+        const token = crypto.randomBytes(20).toString('hex');
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = Date.now() + 3600000; // 1 hora
+
+        await user.save();
+
+
+        const resetURL = `http://tu-sitio.com/reset/${token}`;
+
+
+        const mailOptions = {
+            from: 'tu_correo@gmail.com',
+            to: user.email,
+            subject: 'Restablecimiento de Contraseña',
+            text: `Haz clic en el siguiente enlace para restablecer tu contraseña: ${resetURL}`,
+        };
+
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error(error);
+                return res.status(500).json({ message: 'Error al enviar el correo' });
+            }
+            console.log(`Correo enviado: ${info.response}`);
+            res.json({ message: 'Correo enviado con éxito' });
+        });
+
+
+        res.redirect('/reset/success');
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al procesar la solicitud de restablecimiento de contraseña' });
+    }
 };

@@ -1,0 +1,15 @@
+{{#extends 'layouts/main'}}
+
+{{#content 'body'}}
+  <h1>Crear Nuevo Usuario</h1>
+  <form action="/user/create" method="post">
+
+    <label>Email:</label>
+    <input type="text" name="email" required>
+    
+    <label>Password:</label>
+    <input type="password" name="password" required>
+
+    <button type="submit">Crear Usuario</button>
+  </form>
+{{/content}}

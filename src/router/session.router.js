@@ -21,4 +21,10 @@ router.get(
   callBackGIT
 );
 
+router.get('/create', (req, res) => {
+  res.render('user/create');
+});
+
+router.post('/create', createUser);
+
 export default router;
