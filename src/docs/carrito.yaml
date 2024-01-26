@@ -1,0 +1,15 @@
+paths:
+  /cart:
+    get:
+      summary: Obtener todo el carrito.
+      tags:
+        - carrito
+      responses: 
+        "200":
+          description: El carrito fue devuelto satisfactoriamente.
+        "500":
+          description: Error interno del server.
+    post:
+      summary: Crear nuevo carrito.
+      tags:
+        - carrito

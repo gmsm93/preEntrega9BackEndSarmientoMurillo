@@ -1,6 +1,6 @@
 
 import TicketModel from '../models/ticket.model.js';
-import CartModel from '../models/cart.model.js';
+import CartModel from '../models/cart.models.js';
 
 
 export const generateTicket = async (cart, purchaser) => {

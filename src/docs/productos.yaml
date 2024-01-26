@@ -1,0 +1,48 @@
+paths:
+  /product:
+    get:
+      summary: Obtener todos los productos.
+      tags:
+        - product
+      responses: 
+        "200":
+          description: Los productos fueron devueltos satisfactoriamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/products'
+        "500":
+          description: Error interno del server.
+    post:
+      summary: Crear un producto nuevo.
+      tags:
+        - product
+    put:
+      summary: Modificar un producto existente.
+      tags:
+        - product
+    delete:
+      summary: Eliminar un producto existente.
+      tags:
+        - product
+
+
+components:
+  schemas:
+    products:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID autogenerado
+        title:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripcion del producto
+        category:
+          type: string
+          description: Categoria del producto

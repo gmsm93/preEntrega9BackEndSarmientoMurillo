@@ -1,6 +1,7 @@
 import express from "express"
 import logger from "./utils/logger.js";
 import prdRouter from './router/prd.router.js'
+import cartRouter from './router/ticket.router.js'
 import loggerRouter from './router/logger.router.js'
 import handlebars from 'express-handlebars'
 import passport from 'passport'
@@ -15,6 +16,9 @@ import dotenv from 'dotenv'
 import _yargs from 'yargs'
 import { hideBin } from 'yargs/helpers';
 import CartRepository from "./repository/cart.repository.js";
+
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express";
 
 // Inicializamos variables
 dotenv.config()
@@ -60,6 +64,7 @@ app.use(express.static(__dirname + '/public'));
 // configuracion de rutas
 app.get('/health', (req, res) => res.send('ok'));
 app.use('/product', prdRouter);
+app.use('/cart', cartRouter);
 app.use('/loggerTest',loggerRouter);
 
 app.use('/', viewsRouter);
@@ -75,3 +80,17 @@ mongoose.connect(mongoURL, { dbName: mongoDBName })
   .catch((err) => {
     logger.error('Error de conexión a la base de datos:', err);
   })
+
+  const swaggerOptions = {
+    definition: {
+      openapi: '3.0.1',
+      info: {
+        title: 'Documentacion de sitio web',
+        description: 'Este proyecto no es de Mascotas, es de productos'
+      }
+    },
+    apis: [`${__dirname}/docs/*.yaml`]
+  }
+
+  const specs = swaggerJSDoc(swaggerOptions)
+  app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))

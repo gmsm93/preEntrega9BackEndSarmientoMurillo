@@ -1,6 +1,6 @@
-import TicketModel from '../models/ticket.models.js';
-import ProductModel from '../models/product.models.js';
-import CartModel from '../models/cart.model.js';
+import TicketModel from '../models/ticket.model.js';
+import ProductModel from '../models/prd.models.js';
+import CartModel from '../models/cart.models.js';
 import { finalizePurchaseLogic } from './cart.controller.js';
 import * as TicketService from '../services/ticket.service.js';
 

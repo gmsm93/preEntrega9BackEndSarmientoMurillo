@@ -3,12 +3,15 @@ import prdModel from '../models/prd.models.js';
 import cartModel from '../models/cart.models.js';
 import { generateTicket } from './ticket.controller.js';
 import * as TicketService from '../services/ticket.service.js';
+import { createRequire } from "module";
+import CartFactoryDAO from '../dao/cart.factory.dao.js';
+import CartMongoDBDAO from '../dao/cart.mongodb.dao.js';
 
 const useFactoryDAO = process.argv.includes("--use-factory-dao");
 
 const cartDAO = useFactoryDAO
-  ? require("../dao/cart.factory.dao.js").default
-  : require("../dao/cart.mongodb.dao.js").default;
+  ? CartFactoryDAO
+  : CartMongoDBDAO;
 
 export const getCardID = async (req, res) => {
   try {
